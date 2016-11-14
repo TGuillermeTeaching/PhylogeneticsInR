@@ -12,7 +12,7 @@ output:
 ### [Martin Brazeau](mailto:m.brazeau@imperial.ac.uk) (m.brazeau@imperial.ac.uk)
  -->
 
-## 1. Ressources
+## 1. Resources
 
 
 Liam Revell's book chapter [here](http://faculty.umb.edu/liam.revell/pdfs/Revell_2014.MPCM-chapter.pdf).
