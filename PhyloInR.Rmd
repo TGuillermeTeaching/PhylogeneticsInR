@@ -12,16 +12,16 @@ output:
 ### [Martin Brazeau](mailto:m.brazeau@imperial.ac.uk) (m.brazeau@imperial.ac.uk)
  -->
 
-## 1. Resources
+## 1. Introduction and resources
 
-
-Liam Revell's book chapter [here](http://faculty.umb.edu/liam.revell/pdfs/Revell_2014.MPCM-chapter.pdf).
+This practical introduces you to basic phylogenetic computing in R. We will review importing phylogenetic trees as data files, displaying phylogenetic trees visually, and some basic evolutionary computations that can be conducted with phylogenetic trees. This practical will deliver some of the important background for Coursework 1. Below you will find some of the relevant resources required for this practical.
 
 Parts (sections 2,3,4 and 5) of this practical are written by [Natalie Cooper](http://nhcooper123.github.io/).
 The original can be found [here](https://github.com/nhcooper123/TeachingMaterials/blob/master/PhD_Museum/VisualisingPhylo.Rmd)
 
 The data used throughout the practical can be downloaded from Blackboard or from [here](https://raw.githubusercontent.com/nhcooper123/TeachingMaterials/master/PhD_Museum/elopomorph.tre) and [here](https://raw.githubusercontent.com/nhcooper123/TeachingMaterials/master/PhD_Museum/anole.data.csv) (right click and `save link as`).
 
+Further information can be found in Liam Revell's book chapter [here](http://faculty.umb.edu/liam.revell/pdfs/Revell_2014.MPCM-chapter.pdf).
 
 ## 2. A refresher of phylogenetic trees
 
