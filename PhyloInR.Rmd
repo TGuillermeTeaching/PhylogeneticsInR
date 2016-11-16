@@ -2,7 +2,7 @@
 title: "Phylogenetics in R"
 author: "[Martin Brazeau](mailto:m.brazeau@imperial.ac.uk) (m.brazeau@imperial.ac.uk)"
 date: "`r Sys.Date()`"
-output: pdf_document
+output: html_document
 ---
 
 <!-- ---
@@ -21,10 +21,10 @@ output:
 
 ## 1. Introduction and resources
 
-This practical introduces you to basic phylogenetic computing in R. We will review importing phylogenetic trees as data files, displaying phylogenetic trees visually, and some basic evolutionary computations that can be conducted with phylogenetic trees. This practical will deliver some of the important background for Coursework 1. Below you will find some of the relevant resources required for this practical.
+This practical introduces you to basic phylogenetic computing in `R`. We will review importing phylogenetic trees as data files, displaying phylogenetic trees visually, and some basic evolutionary computations that can be conducted with phylogenetic trees. This practical will deliver some of the important background for Coursework 1. Below you will find some of the relevant resources required for this practical.
 
 Parts (sections 2,3,4 and 5) of this practical are written by [Natalie Cooper](http://nhcooper123.github.io/).
-The original can be found [here](https://github.com/nhcooper123/TeachingMaterials/blob/master/PhD_Museum/VisualisingPhylo.Rmd)
+The original can be found [here](https://github.com/nhcooper123/TeachingMaterials/blob/master/PhD_Museum/VisualisingPhylo.Rmd).
 
 The data used throughout the practical can be downloaded from Blackboard or from [here](https://raw.githubusercontent.com/nhcooper123/TeachingMaterials/master/PhD_Museum/elopomorph.tre) and [here](https://raw.githubusercontent.com/nhcooper123/TeachingMaterials/master/PhD_Museum/anole.data.csv) (right click and `save link as`).
 
@@ -92,9 +92,12 @@ Or with branch length:
 
 Trees are also increasing use of XML formats such as PhyloXML and NeXML.
 
+In this practical we are going to use the `elopomorph.tre` newick tree.
+You can open it with a simple text editor to see the newick tree structure.
+
 #### Edge table
 
-It is also possible to represent a phylogenetic tree as a matrix of edges and vertices called an edge table. This is an even less intuitive representation, but it is implemented in R and worth reviewing here.
+It is also possible to represent a phylogenetic tree as a matrix of edges and vertices called an edge table. This is an even less intuitive representation, but it is implemented in `R` and worth reviewing here.
 
 There are a number of conventions that can be used to create an edge table. The general concept consists of numbering the tips *1 - n*, and all internal nodes labeled *n+1 ... n+n-1*. The numbers for the internal nodes can be assigned arbitrarily or according to an algorithm.
 
@@ -123,7 +126,7 @@ At a lower level, phylogenetic trees can be represented in computer memory as mo
 
 
 ## 2. Installing and loading extra packages in `R`
-To plot phylogenies (or use any specialized analysis) in R, you need to download one or more additional packages from the basic R installation. 
+To plot phylogenies (or use any specialized analysis) in `R`, you need to download one or more additional packages from the basic `R` installation. 
 For this practical you will need to install the following packages: 
 
 * `ape`
@@ -137,9 +140,9 @@ install.packages("ape")
 
 Pick the closest mirror to you if asked. Now install `phytools`.
 
-You've installed the packages but they don't automatically get loaded into your R session. 
-Instead you need to tell R to load them **every time** you start a new R session and want to use functions from these packages. 
-To load the package `ape` into your current R session:
+You've installed the packages but they don't automatically get loaded into your `R` session. 
+Instead you need to tell `R` to load them **every time** you start a new `R` session and want to use functions from these packages. 
+To load the package `ape` into your current `R` session:
 
 ```{r, message = FALSE}
 library(ape)
@@ -153,19 +156,27 @@ Don't forget to load `phytools` too!
 library(phytools)
 ```
 
-## 3. Loading your phylogeny and data into R
+###### Note that the latest version of `ape` (`3.5`) now requires you to have `R v3.2.0` installed (or higher). If you are using an older version of `R` you can always install an older version of `ape` as follows:
+
+```{r, eval = FALSE}
+old_ape <- "https://cran.r-project.org/src/contrib/Archive/ape/ape_3.4.tar.gz"
+install.packages(old_ape, repos = NULL, type = "source")
+```
+Or change the version number to something even lower (e.g. change `ape_3.4.tar.gz` to `ape_3.0.tar.gz`).
+However, remember that this is a bad practice in informatics and that you should always prefer the most up to date (and corrected!) version.
+
+## 3. Loading your phylogeny and data into `R`
 ### Reading in a phylogeny from a file
-To load a tree you need either the function `read.tree` or `read.nexus`.
-`read.tree` can deal with a number of different types of data (including DNA) whereas `read.nexus` reads NEXUS files. 
-`elopomorph.tre` is not in NEXUS format so we use `read.tree`. 
+To load a tree you need the function `read.tree`.
+`read.tree` can read any newick format trees (see above) like the `elopomorph.tre` file.
 
 ```{r}
 fishtree <- read.tree("elopomorph.tre")
 ```
-> Be sure you are always in the right directory. Remember you can navigate in `R` using `setwd()`, `getwd()` and `list.files()` (to see what's in the current directory).
+###### Be sure you are always in the right directory. Remember you can navigate in `R` using `setwd()`, `getwd()` and `list.files()` (to see what's in the current directory).
 
-### Reading in a phylogeny that is already built into R
-The bird and anole phylogenies are already built into R so we don't need to read them in using `read.tree`.
+### Reading in a phylogeny that is already built into `R`
+The bird and anole phylogenies are already built into `R` so we don't need to read them in using `read.tree`.
 Instead we just use:
 
 ```{r}
@@ -173,10 +184,11 @@ data(bird.orders)
 data(anoletree)
 ```
 
-### Reading and viewing your data in R
+### Reading and viewing your data in `R`
 Later we will use some Greater Antillean *Anolis* lizard data to add data to a phylogeny.
 Before we can add data to our tree, we need to load the data we are going to use. 
-R can read files in lots of formats, including comma-delimited and tab-delimited files. Excel (and many other applications) can output files in this format (it's an option in the `Save As` dialog box under the `File` menu). 
+`R` can read files in lots of formats, including comma-delimited and tab-delimited files.
+Excel (and many other applications) can output files in this format (it's an option in the `Save As` dialogue box under the `File` menu). 
 To save time I have given you a comma-delimited text file called `anole.data.csv` which we are going to use. 
 Load these data as follows. 
 I am assuming you have set your working directory, if not don't forget the path.
@@ -185,11 +197,12 @@ I am assuming you have set your working directory, if not don't forget the path.
 anoledata <- read.csv("anole.data.csv", header = TRUE)
 ```
 
-You can use `read.delim` for tab delimited files or `read.csv` for comma delimited files. `header = TRUE`, indicates that the first line of the data contains column headings.
+You can use `read.delim` for tab delimited files or `read.csv` for comma delimited files (**c**omma **s**eparated **v**alues).
+`header = TRUE`, indicates that the first line of the data contains column headings.
 
-This is a good point to note that unless you \textbf{tell} R you want to do something, it won't do it automatically. 
-So here if you successfully entered the data, R won't give you any indication that it worked. 
-Instead you need to specifically ask R to look at the data.
+This is a good point to note that unless you **tell** `R` you want to do something, it won't do it automatically. 
+So here if you successfully entered the data, `R` won't give you any indication that it worked.
+Instead you need to specifically ask `R` to look at the data.
 
 We can look at the data by typing:
 
@@ -200,8 +213,8 @@ str(anoledata)
 **Always** look at your data before beginning any analysis to check it read in correctly.
 
 `str` shows the structure of the data frame (this can be a really useful command when you have a big data file). 
-It also tells you what kind of variables R thinks you have (characters, integers, numeric, factors etc.). 
-Some R functions need the data to be certain kinds of variables so it's useful to check this.
+It also tells you what kind of variables `R` thinks you have (characters, integers, numeric, factors etc.). 
+Some `R` functions need the data to be certain kinds of variables so it's useful to check this.
 
 ```{r}
 head(anoledata)
@@ -221,7 +234,7 @@ anoledata
 
 This will print out all of the data!
 
-## 4. Basic tree viewing in R
+## 4. Basic tree viewing in `R`
 Now let's visualise some phylogenies! We'll use the Elopomorpha (eels and similar fishes) tree to start as it is simple.
 
 ```{r}
@@ -238,7 +251,7 @@ str(fishtree)
 `fishtree` is a fully resolved tree with branch lengths. 
 There are 62 species and 61 internal nodes. 
 We can plot the tree by using the `plot.phylo` function of `ape`. 
-Note that we can just use the function `plot` to do this as R knows if we ask it to plot a phylogeny to use `plot.phylo` instead!
+Note that we can just use the function `plot` to do this as `R` knows if we ask it to plot a phylogeny to use `plot.phylo` instead!
 
 ```{r, fig.width=8, fig.height=8, fig.align='center'}
 plot(fishtree, cex = 0.5)
@@ -251,14 +264,20 @@ We can also zoom into different sections of the tree that you're interested in:
 zoom(fishtree, grep("Gymnothorax", fishtree$tip.label), subtree = FALSE, cex = 0.8)
 ```
 
-This just gives you the tree for *Micropterus* species but you can also see how the species fit into the rest of the tree using:
+The `grep` function is a generic function in `R` that allows to *grab* any element in an object containing the desired characters.
+In this example, `grep` is going to search for all the elements in `fishtree$tip.label` that contains `Gymnothorax` (e.g. `Gymnothorax_kidako`, `Gymnothorax_reticularis`).
+Try using only `grep("thorax", fishtree$tip.label)` to see if it also only selects the members of the *Gymnothorax* genus.
+
+In this example, we just display the tree for the *Gymnothorax* genus but you can also see how the species fit into the rest of the tree using:
+
 
 ```{r, fig.width=8, fig.height=8, fig.align='center'}
 zoom(fishtree, grep("Gymnothorax", fishtree$tip.label), subtree = TRUE, cex = 0.8)
 ```
 
-Note that `zoom` automatically sets the plotting window to display two plots at once. 
-To reset this to one plot only use:
+###### Note that `zoom` is a specific plotting function that will automatically set the plotting window to display two plots at once. This might create some conflicts if you're using RStudio. The bug can be easily solved though by typing `dev.off()` to reinitialise the plotting window and then proceed to the normal `zoom(...)` function as written above.
+
+You can also reset this to one plot only per window by using:
 
 ```{r}
 par(mfrow = c(1, 1))
@@ -270,59 +289,85 @@ To get further options for the plotting of phylogenies:
 ?plot.phylo
 ```
 
+Using the question mark (`?`) can also be done for every function if you want more details!
+
 Note that although you can use `plot` to plot the phylogeny, you need to specify `plot.phylo` to find out the options for plotting trees. You can change the style of the tree (`type`), the color of the branches and tips (`edge.color`, `tip.color`), and the size of the tip labels (`cex`). 
 Here's an fun/hideous example! 
 
 ```{r, fig.width=8, fig.height=8, fig.align='center'}
-plot(fishtree, type = "fan", edge.color = "deeppink", tip.color = "springgreen", 
-     cex = 0.5)
+plot(fishtree, type = "unrooted", edge.color = "deeppink", tip.color = "springgreen",  cex = 0.5)
 ```
 
 Or try
 
 ```{r, fig.width=8, fig.height=8, fig.align='center'}
-plot(fishtree, type = "c", edge.color = "darkviolet", tip.color = "hotpink", 
-     cex = 0.5)
+plot(ladderize(fishtree), type = "c", edge.color = "darkviolet", tip.color = "hotpink",  cex = 0.5)
 ```
 
-## 5. Adding trait data to trees in R
+The `ladderize` function allows to display the branches from shortest to longest.
+
+> Try to modify the graphical options (colors, display, size, ordering of the nodes, etc.) to obtain the most beautiful or ugliest Elopomorpha phylogeny!
+
+
+## 5. Adding trait data to trees in `R`
 ### A. Ancestral state reconstructions on discrete data
-We will use the bird data
+For this exercise we will use the bird data.
 Remember we already loaded the phylogeny and data as follows:
 
 ```{r}
 data(bird.orders)
 ```
 
-First we will invent some data for each bird order that we can reconstruct along the tree. 
-This creates three variables, 0, 1 and 2. 
+First we will invent some data for each bird order that we can reconstruct along the tree.
+Lets pretend we went in the field and studied each taxa's dietary preferences and found out that they can be sorted into three categories: herbivores, omnivores and carnivores.
 
 ```{r}
-mydata <- factor(c(rep(0, 5), rep(1, 13), rep(2, 5)))
-mydata
+diets <- c(rep("Herbivore", 5), "Omnivore", rep("Carnivore", 4), rep("Omnivore", 5),
+    rep("Herbivore", 2), rep("Omnivore", 3), rep("Carnivore", 2), "Omnivore")
+```
+
+The function `rep` simply repeats the dietary name *n* times.
+Here we assigned the dietary category to each bird group in the order they appear in the phylogeny.
+You can then check your information by using the function `paste` that will simply paste together the birds orders and their diet:
+
+```{r}
+paste(bird.orders$tip.label, "-", diets)
 ```
 
 We can then use the `ape` function `ace` to reconstruct ancestral characters along the nodes of the tree. 
 `type = d` means the character to be reconstructed is discrete.
 
 ```{r}
-ancestors <- ace(mydata, bird.orders, type = "d")
+ancestors <- ace(diets, bird.orders, type = "d")
 ```
 
-Now we can plot this on a phylogeny. 
+`ace` uses a likelihood function to estimate what is the probability of each node to be one of the three dietary categories.
+You can find more information on how `ace` works by looking at its manual page (`?ape`) or you can look at the results:
+
+```{r}
+ancestors
+```
+
+This gives use information on:
+
+* the rate index matrix (i.e. the probability of changing from one dietary category to another - here every probability are as likely)
+* the parameter estimates (i.e. the rate - or speed - at which changes in diet can occur along the branches)
+* the scaled likelihood at the root (i.e. the likelihood of the ancestor of all birds to be of one dietary category or the other)
+
+For more clarity, we can plot all this on a phylogeny.
 First decide which colours we'd like.
-To look at a list of colours in R type in `colors()`.
+To look at a list of colours in `R` type in `colors()`.
 
 ```{r}
 colours <- c("cornflowerblue", "cyan4", "goldenrod")
 ```
 
 Now plot the tree and add labels to the tips and the nodes using the results in `ancestors`. 
-We use `label.offset = 1` to move the labels to the right a bit so the pie charts will fit...
+We use `label.offset = 1` to move the labels to the right a bit so the pie charts will fit.
 
 ```{r, fig.width=8, fig.height=8, fig.align='center'}
 plot(bird.orders, label.offset = 1)
-tiplabels(pch = 21, bg = colours[as.numeric(mydata)], cex = 2, adj = 1)
+tiplabels(pch = 21, bg = colours[as.factor(diets)], cex = 2, adj = 1)
 nodelabels(pie = ancestors$lik.anc, piecol = colours)
 ```
 
@@ -330,7 +375,12 @@ nodelabels(pie = ancestors$lik.anc, piecol = colours)
 `cex = 2` doubles the point size, and `adj = 1` moves the tip labels sideways so they don't obscure the ends of the branches.
 `pie` makes pie charts coloured using the ancestral state reconstructions in `ancestors`, and `piecol` tells it to use the colours we have defined.
 
+> Again, try to change the graphical parameters to obtain the ugliest or most beautiful figure that tells us about the evolution of diet in birds.
+
+> Can you tell what is the most likely diet of the ancestor of these birds? Also what is the rate of change in diet in birds per unit of time?
+
 ### B. Ancestral state reconstructions on continuous data
+Similarly to discrete categorical data (see above) we can analysis continuous data to estimate the value of this data for the ancestor of a phylogeny.
 We are going to use the *Anolis* data to create a phylogeny with different colours for different observed and reconstructed body sizes (snout-to-vent length, SVL). 
 Remember we already loaded the phylogeny and data as follows:
 
@@ -346,40 +396,55 @@ So to get the two to match we need to add `Anolis_` to each name.
 ```{r}
 rownames(anoledata) <- paste("Anolis", rownames(anoledata), sep = "_")
 ```
-`paste` just sticks together `Anolis` with the names in `anoles` already with an underscore (`_`) separating them (`sep = "_"`)
 
+As seen before, `paste` just sticks together `Anolis` with the names in `anoles` already with an underscore (`_`) separating them (`sep = "_"`).
 We then need to make sure the order of the species in the data matches that of the phylogeny.
 
 ```{r}
 anoledata <- anoledata[anoletree$tip.label, ]
 ```
 
-Next we make a matrix containing only the SVL values for each *Anolis* species:
+Next we make a matrix containing only the average snout-to-vent length values for each *Anolis* species:
 
 ```{r}
 SVL <- as.matrix(anoledata)[,"AVG.SVL"]
 ```
 
-This code selects only the variable `AVG.SVL` from `anoledata` (square brackets subset in R in the form [rows, columns]), and then uses `as.matrix` to make this into a matrix.
+This code selects only the variable `AVG.SVL` from `anoledata` (square brackets subset in `R` in the form [rows, columns]), and then uses `as.matrix` to make this data frame into a matrix.
 
-Take a look at `SVL`
+Take a look at the first values in `SVL`:
 
 ```{r}
 head(SVL)
 ```
 
-We then use the function `contMap`. 
+We can use the `ace` function as before but by changing the data, the tree and the method (`c` for continuous):
+
+```{r}
+SVLancestors <- ace(SVL, anoletree, type = "c")
+```
+
+The estimation uses a similar Maximum Likelihood function as before but now gives us:
+
+* the estimated value for each node (use `SVLancestors$ace` to display it)
+* the 95% confidence intervals for each estimate value (use `SVLancestors$CI95` to display it)
+* the sigma<sup>2</sup> value that is the parameter estimation from the evolutionary model used (by default a Brownian motion model; google it, it's fun!)
+
+To visualise this data, we will us the function `contMap` from the `phytools` package. 
 `contMap` creates a tree with a mapped continuous character, i.e. where the value of the character is known at the tips, and estimated along the tree. 
-The estimating of the character along the tree uses a Maximum Likelihood estimation procedure.
+The estimating of the character along the tree also uses a Maximum Likelihood estimation procedure similar to `ace`.
 Here we will tell `contMap` not to automatically plot the tree (using `plot = FALSE`) so we can make some modifications.
 
 ```{r}
 SVLplot <- contMap(anoletree, SVL, plot = FALSE)
 ```
- For some reason this code breaks...
 
-Finally let's plot the tree as a fan (`legend = 10` just spreads the legend out so it is readable).
+Finally let's plot the tree as a fan (`legend = 5` just spreads the legend out so it is readable).
 
 ```{r, fig.width=8, fig.height=8, fig.align='center'}
-plot(SVLplot, type = "fan", legend = 10)
+plot(SVLplot, type = "fan", legend = 5)
 ```
+
+> What is the estimated snout-to-ventral length for the ancestor of *Anolis* lizards? What is the confidence around this estimation?
+
+> By using the plot, can you spot the clades with small or big lizards? Is there any clade where the size seems to be changing a lot in evolutionary time?
